@@ -29,6 +29,11 @@ export async function fetchBills(page: number = 1, pageSize: number = 10, billSo
       sponsor: bill.originHouse?.showAs || '',
       shortTitleEn: bill.shortTitleEn || '',
       shortTitleGa: bill.shortTitleGa || '',
+      longTitleEn: bill.longTitleEn || '',
+      longTitleGa: bill.longTitleGa || '',
+      source: bill.source || '',
+      method: bill.method || '',
+      lastUpdated: bill.lastUpdated || '',
     };
   });
 

@@ -17,6 +17,7 @@ import {
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { Bill, BillTableProps } from '../types/bill';
 import Filter from './Filter';
+import BillModal from './BillModal';
 
 const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit, totalCount, currentBillSource }) => {
   const router = useRouter();
@@ -25,6 +26,10 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
   // Convert from 1-indexed (API) to 0-indexed (Material UI pagination)
   const [page, setPage] = useState(currentPage - 1);
   const [rowsPerPage, setRowsPerPage] = useState(currentLimit);
+  
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedBill, setSelectedBill] = useState<Bill | null>(null);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     const newPageOneIndexed = newPage + 1; // Convert back to 1-indexed for API
@@ -57,6 +62,16 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
     router.push(`?${params.toString()}`);
   };
 
+  const handleRowClick = (bill: Bill) => {
+    setSelectedBill(bill);
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setSelectedBill(null);
+  };
+
   return (
     <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
       <Box sx={{ mb: 2, width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
@@ -79,13 +94,23 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
             </TableHead>
             <TableBody>
               {bills.map((bill, idx) => (
-                <TableRow key={idx} hover>
+                <TableRow 
+                  key={idx} 
+                  hover
+                  onClick={() => handleRowClick(bill)}
+                  sx={{ cursor: 'pointer' }}
+                >
                   <TableCell sx={{ minWidth: 120, width: '15%' }}>{bill.billNo}</TableCell>
                   <TableCell sx={{ minWidth: 100, width: '15%' }}>{bill.billType}</TableCell>
                   <TableCell sx={{ minWidth: 120, width: '20%' }}>{bill.status}</TableCell>
                   <TableCell sx={{ minWidth: 200, width: '35%' }}>{bill.sponsor}</TableCell>
                   <TableCell sx={{ minWidth: 80, width: '15%' }}>
-                    <IconButton>
+                    <IconButton 
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent row click when clicking star
+                        // TODO: Handle favourite functionality
+                      }}
+                    >
                       <StarBorderIcon color={'inherit'} />
                     </IconButton>
                   </TableCell>
@@ -104,6 +129,12 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      
+      <BillModal 
+        open={modalOpen}
+        onClose={handleModalClose}
+        bill={selectedBill}
+      />
     </Box>
   );
 };

@@ -6,6 +6,11 @@ export interface Bill {
   sponsor: string;
   shortTitleEn: string;
   shortTitleGa: string;
+  longTitleEn: string;
+  longTitleGa: string;
+  source: string;
+  method: string;
+  lastUpdated: string;
 }
 
 export interface BillsResponse {
