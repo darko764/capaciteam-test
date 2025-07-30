@@ -1,13 +1,18 @@
 import { Bill, BillsResponse } from '../types/bill';
 
-export async function fetchBills(page: number = 1, pageSize: number = 10): Promise<BillsResponse> {
+export async function fetchBills(page: number = 1, pageSize: number = 10, billSource?: string): Promise<BillsResponse> {
   // Use absolute URL on the server, relative on the client
   const isServer = typeof window === 'undefined';
   const baseUrl = isServer
     ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
     : '';
   
-  const url = `${baseUrl}/api/bills?page=${page}&limit=${pageSize}`;
+  let url = `${baseUrl}/api/bills?page=${page}&limit=${pageSize}`;
+  
+  // Add bill source filter if provided
+  if (billSource) {
+    url += `&bill_source=${encodeURIComponent(billSource)}`;
+  }
 
   const res = await fetch(url);
   if (!res.ok) throw new Error('Failed to fetch bills');

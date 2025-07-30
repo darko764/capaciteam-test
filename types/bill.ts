@@ -18,4 +18,5 @@ export interface BillTableProps {
   currentPage: number;
   currentLimit: number;
   totalCount: number;
+  currentBillSource: string;
 }

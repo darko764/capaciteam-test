@@ -11,12 +11,14 @@ import {
   TableRow, 
   Paper, 
   IconButton,
-  TablePagination
+  TablePagination,
+  Box
 } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { Bill, BillTableProps } from '../types/bill';
+import Filter from './Filter';
 
-const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit, totalCount }) => {
+const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit, totalCount, currentBillSource }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -44,46 +46,65 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
     router.push(`?${params.toString()}`);
   };
 
+  const handleBillSourceChange = (billSource: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (billSource) {
+      params.set('bill_source', billSource);
+    } else {
+      params.delete('bill_source');
+    }
+    params.set('page', '1'); // Reset to first page when filtering
+    router.push(`?${params.toString()}`);
+  };
+
   return (
-    <Paper>
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Bill Number</TableCell>
-              <TableCell>Bill Type</TableCell>
-              <TableCell>Bill Status</TableCell>
-              <TableCell>Sponsor</TableCell>
-              <TableCell>Favourite</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {bills.map((bill, idx) => (
-              <TableRow key={idx} hover>
-                <TableCell>{bill.billNo}</TableCell>
-                <TableCell>{bill.billType}</TableCell>
-                <TableCell>{bill.status}</TableCell>
-                <TableCell>{bill.sponsor}</TableCell>
-                <TableCell>
-                  <IconButton>
-                    <StarBorderIcon color={'inherit'} />
-                  </IconButton>
-                </TableCell>
+    <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
+      <Box sx={{ mb: 2, width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+        <Filter 
+          billSource={currentBillSource} 
+          onBillSourceChange={handleBillSourceChange} 
+        />
+      </Box>
+      <Paper>
+        <TableContainer>
+          <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ minWidth: 120, width: '15%' }}>Bill Number</TableCell>
+                <TableCell sx={{ minWidth: 100, width: '15%' }}>Bill Type</TableCell>
+                <TableCell sx={{ minWidth: 120, width: '20%' }}>Bill Status</TableCell>
+                <TableCell sx={{ minWidth: 200, width: '35%' }}>Sponsor</TableCell>
+                <TableCell sx={{ minWidth: 80, width: '15%' }}>Favourite</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={totalCount}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
+            </TableHead>
+            <TableBody>
+              {bills.map((bill, idx) => (
+                <TableRow key={idx} hover>
+                  <TableCell sx={{ minWidth: 120, width: '15%' }}>{bill.billNo}</TableCell>
+                  <TableCell sx={{ minWidth: 100, width: '15%' }}>{bill.billType}</TableCell>
+                  <TableCell sx={{ minWidth: 120, width: '20%' }}>{bill.status}</TableCell>
+                  <TableCell sx={{ minWidth: 200, width: '35%' }}>{bill.sponsor}</TableCell>
+                  <TableCell sx={{ minWidth: 80, width: '15%' }}>
+                    <IconButton>
+                      <StarBorderIcon color={'inherit'} />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={totalCount}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </Box>
   );
 };
 
