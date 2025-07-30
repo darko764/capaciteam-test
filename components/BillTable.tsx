@@ -14,7 +14,7 @@ import {
   TablePagination
 } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import { BillTableProps } from '../types/bill';
+import { Bill, BillTableProps } from '../types/bill';
 
 const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit, totalCount }) => {
   const router = useRouter();

@@ -6,6 +6,7 @@ export async function fetchBills(page: number = 1, pageSize: number = 10): Promi
   const baseUrl = isServer
     ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
     : '';
+  
   const url = `${baseUrl}/api/bills?page=${page}&limit=${pageSize}`;
 
   const res = await fetch(url);
