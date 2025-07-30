@@ -50,7 +50,11 @@ export default function ThemeRegistry({ children }: { children: React.ReactNode 
     );
   });
 
-  const theme = createTheme();
+  const theme = createTheme({
+    palette: {
+      mode: 'dark',
+    },
+  });
 
   return (
     <CacheProvider value={cache}>

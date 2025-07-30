@@ -19,9 +19,9 @@ export default async function Home({ searchParams }: HomeProps) {
     <Box sx={{ 
       minHeight: '100vh', 
       padding: 3,
-      maxWidth: '1400px',
-      margin: '0 auto',
-      width: '100%'
+      width: '100%',
+      backgroundColor: 'background.default',
+      color: 'text.primary'
     }}>
       <BillTable 
         bills={bills} 
