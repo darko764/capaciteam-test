@@ -15,9 +15,11 @@ import {
   Box
 } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
 import { Bill, BillTableProps } from '../types/bill';
 import Filter from './Filter';
 import BillModal from './BillModal';
+import { useFavourites } from '../hooks/useFavourites';
 
 const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit, totalCount, currentBillSource }) => {
   const router = useRouter();
@@ -26,10 +28,11 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
   // Convert from 1-indexed (API) to 0-indexed (Material UI pagination)
   const [page, setPage] = useState(currentPage - 1);
   const [rowsPerPage, setRowsPerPage] = useState(currentLimit);
-  
-  // Modal state
+
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBill, setSelectedBill] = useState<Bill | null>(null);
+
+  const { isFavourited, toggleFavourite } = useFavourites();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     const newPageOneIndexed = newPage + 1; // Convert back to 1-indexed for API
@@ -72,6 +75,11 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
     setSelectedBill(null);
   };
 
+  const handleFavouriteClick = (bill: Bill, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent row click when clicking star
+    toggleFavourite(bill);
+  };
+
   return (
     <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
       <Box sx={{ mb: 2, width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
@@ -85,11 +93,11 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
           <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ minWidth: 120, width: '15%' }}>Bill Number</TableCell>
-                <TableCell sx={{ minWidth: 100, width: '15%' }}>Bill Type</TableCell>
-                <TableCell sx={{ minWidth: 120, width: '20%' }}>Bill Status</TableCell>
-                <TableCell sx={{ minWidth: 200, width: '35%' }}>Sponsor</TableCell>
-                <TableCell sx={{ minWidth: 80, width: '15%' }}>Favourite</TableCell>
+                <TableCell sx={{ minWidth: 120, width: '15%', fontWeight: 600 }}>Bill Number</TableCell>
+                <TableCell sx={{ minWidth: 100, width: '15%', fontWeight: 600 }}>Bill Type</TableCell>
+                <TableCell sx={{ minWidth: 120, width: '20%', fontWeight: 600 }}>Bill Status</TableCell>
+                <TableCell sx={{ minWidth: 200, width: '35%', fontWeight: 600 }}>Sponsor</TableCell>
+                <TableCell sx={{ minWidth: 80, width: '15%', fontWeight: 600 }}>Favourite</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -106,12 +114,19 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
                   <TableCell sx={{ minWidth: 200, width: '35%' }}>{bill.sponsor}</TableCell>
                   <TableCell sx={{ minWidth: 80, width: '15%' }}>
                     <IconButton 
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent row click when clicking star
-                        // TODO: Handle favourite functionality
+                      onClick={(e) => handleFavouriteClick(bill, e)}
+                      sx={{ 
+                        color: isFavourited(bill) ? 'warning.main' : 'inherit',
+                        '&:hover': {
+                          color: isFavourited(bill) ? 'warning.dark' : 'warning.main'
+                        }
                       }}
                     >
-                      <StarBorderIcon color={'inherit'} />
+                      {isFavourited(bill) ? (
+                        <StarIcon color="inherit" />
+                      ) : (
+                        <StarBorderIcon color="inherit" />
+                      )}
                     </IconButton>
                   </TableCell>
                 </TableRow>
