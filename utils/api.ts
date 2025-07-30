@@ -1,14 +1,6 @@
-export interface Bill {
-  billNo: string;
-  billYear: string;
-  billType: string;
-  status: string;
-  sponsor: string;
-  shortTitleEn: string;
-  shortTitleGa: string;
-}
+import { Bill, BillsResponse } from '../types/bill';
 
-export async function fetchBills(page: number = 1, pageSize: number = 10): Promise<Bill[]> {
+export async function fetchBills(page: number = 1, pageSize: number = 10): Promise<BillsResponse> {
   // Use absolute URL on the server, relative on the client
   const isServer = typeof window === 'undefined';
   const baseUrl = isServer
@@ -21,7 +13,7 @@ export async function fetchBills(page: number = 1, pageSize: number = 10): Promi
   const data = await res.json();
 
   // Parse the API response to extract required fields from results[].bill
-  return (data.results || []).map((item: any) => {
+  const bills = (data.results || []).map((item: any) => {
     const bill = item.bill;
     return {
       billNo: bill.billNo,
@@ -33,4 +25,9 @@ export async function fetchBills(page: number = 1, pageSize: number = 10): Promi
       shortTitleGa: bill.shortTitleGa || '',
     };
   });
+
+  // Extract total count from the API response
+  const totalCount = data.head?.counts?.billCount || 0;
+
+  return { bills, totalCount };
 }
