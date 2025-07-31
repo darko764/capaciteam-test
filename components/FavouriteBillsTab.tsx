@@ -20,11 +20,7 @@ import { useFavourites } from '../contexts/FavouritesContext';
 import BillModal from './BillModal';
 import Filter from './Filter';
 
-interface FavouriteBillsTabProps {
-  // No longer needed - we get bills directly from context
-}
-
-const FavouriteBillsTab: React.FC<FavouriteBillsTabProps> = () => {
+const FavouriteBillsTab: React.FC = () => {
   const { isFavourited, toggleFavourite, getFavouritedBills, getFavouritedCount } = useFavourites();
   
   // Modal state
