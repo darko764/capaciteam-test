@@ -12,14 +12,17 @@ import {
   Paper, 
   IconButton,
   TablePagination,
-  Box
+  Box,
+  Tabs,
+  Tab
 } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import { Bill, BillTableProps } from '../types/bill';
 import Filter from './Filter';
 import BillModal from './BillModal';
-import { useFavourites } from '../hooks/useFavourites';
+import FavouriteBillsTab from './FavouriteBillsTab';
+import { useFavourites } from '../contexts/FavouritesContext';
 
 const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit, totalCount, currentBillSource }) => {
   const router = useRouter();
@@ -31,6 +34,9 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
 
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBill, setSelectedBill] = useState<Bill | null>(null);
+
+  // Tab state
+  const [activeTab, setActiveTab] = useState(0);
 
   const { isFavourited, toggleFavourite } = useFavourites();
 
@@ -80,70 +86,91 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
     toggleFavourite(bill);
   };
 
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
+
   return (
     <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
-      <Box sx={{ mb: 2, width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-        <Filter 
-          billSource={currentBillSource} 
-          onBillSourceChange={handleBillSourceChange} 
-        />
+      {/* Tabs */}
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+        <Tabs value={activeTab} onChange={handleTabChange} aria-label="bill table tabs">
+          <Tab label="All Bills" />
+          <Tab label="Favourites" />
+        </Tabs>
       </Box>
-      <Paper>
-        <TableContainer>
-          <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ minWidth: 120, width: '15%', fontWeight: 600 }}>Bill Number</TableCell>
-                <TableCell sx={{ minWidth: 100, width: '15%', fontWeight: 600 }}>Bill Type</TableCell>
-                <TableCell sx={{ minWidth: 120, width: '20%', fontWeight: 600 }}>Bill Status</TableCell>
-                <TableCell sx={{ minWidth: 200, width: '35%', fontWeight: 600 }}>Sponsor</TableCell>
-                <TableCell sx={{ minWidth: 80, width: '15%', fontWeight: 600 }}>Favourite</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {bills.map((bill, idx) => (
-                <TableRow 
-                  key={idx} 
-                  hover
-                  onClick={() => handleRowClick(bill)}
-                  sx={{ cursor: 'pointer' }}
-                >
-                  <TableCell sx={{ minWidth: 120, width: '15%' }}>{bill.billNo}</TableCell>
-                  <TableCell sx={{ minWidth: 100, width: '15%' }}>{bill.billType}</TableCell>
-                  <TableCell sx={{ minWidth: 120, width: '20%' }}>{bill.status}</TableCell>
-                  <TableCell sx={{ minWidth: 200, width: '35%' }}>{bill.sponsor}</TableCell>
-                  <TableCell sx={{ minWidth: 80, width: '15%' }}>
-                    <IconButton 
-                      onClick={(e) => handleFavouriteClick(bill, e)}
-                      sx={{ 
-                        color: isFavourited(bill) ? 'warning.main' : 'inherit',
-                        '&:hover': {
-                          color: isFavourited(bill) ? 'warning.dark' : 'warning.main'
-                        }
-                      }}
+
+      {/* Tab Content */}
+      {activeTab === 0 && (
+        <>
+          <Box sx={{ mb: 2, width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+            <Filter 
+              billSource={currentBillSource} 
+              onBillSourceChange={handleBillSourceChange} 
+            />
+          </Box>
+          <Paper>
+            <TableContainer>
+              <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ minWidth: 120, width: '15%', fontWeight: 600 }}>Bill Number</TableCell>
+                    <TableCell sx={{ minWidth: 100, width: '15%', fontWeight: 600 }}>Bill Type</TableCell>
+                    <TableCell sx={{ minWidth: 120, width: '20%', fontWeight: 600 }}>Bill Status</TableCell>
+                    <TableCell sx={{ minWidth: 200, width: '35%', fontWeight: 600 }}>Sponsor</TableCell>
+                    <TableCell sx={{ minWidth: 80, width: '15%', fontWeight: 600 }}>Favourite</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {bills.map((bill, idx) => (
+                    <TableRow 
+                      key={idx} 
+                      hover
+                      onClick={() => handleRowClick(bill)}
+                      sx={{ cursor: 'pointer' }}
                     >
-                      {isFavourited(bill) ? (
-                        <StarIcon color="inherit" />
-                      ) : (
-                        <StarBorderIcon color="inherit" />
-                      )}
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={totalCount}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+                      <TableCell sx={{ minWidth: 120, width: '15%' }}>{bill.billNo}</TableCell>
+                      <TableCell sx={{ minWidth: 100, width: '15%' }}>{bill.billType}</TableCell>
+                      <TableCell sx={{ minWidth: 120, width: '20%' }}>{bill.status}</TableCell>
+                      <TableCell sx={{ minWidth: 200, width: '35%' }}>{bill.sponsor}</TableCell>
+                      <TableCell sx={{ minWidth: 80, width: '15%' }}>
+                        <IconButton 
+                          onClick={(e) => handleFavouriteClick(bill, e)}
+                          sx={{ 
+                            color: isFavourited(bill) ? 'warning.main' : 'inherit',
+                            '&:hover': {
+                              color: isFavourited(bill) ? 'warning.dark' : 'warning.main'
+                            }
+                          }}
+                        >
+                          {isFavourited(bill) ? (
+                            <StarIcon color="inherit" />
+                          ) : (
+                            <StarBorderIcon color="inherit" />
+                          )}
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={totalCount}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+        </>
+      )}
+
+      {activeTab === 1 && (
+        <FavouriteBillsTab allBills={bills} />
+      )}
       
       <BillModal 
         open={modalOpen}

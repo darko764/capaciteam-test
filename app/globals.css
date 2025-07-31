@@ -30,4 +30,5 @@ a {
 
 html {
   color-scheme: dark;
+  overflow-y: scroll;
 }

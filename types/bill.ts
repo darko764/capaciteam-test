@@ -25,3 +25,11 @@ export interface BillTableProps {
   totalCount: number;
   currentBillSource: string;
 }
+
+export interface FavouritesContextType {
+  favouritedBills: Set<string>;
+  isFavourited: (bill: Bill) => boolean;
+  toggleFavourite: (bill: Bill) => void;
+  getFavouritedBills: (allBills: Bill[]) => Bill[];
+  getFavouritedCount: () => number;
+}
