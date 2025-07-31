@@ -168,9 +168,9 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
         </>
       )}
 
-      {activeTab === 1 && (
-        <FavouriteBillsTab allBills={bills} />
-      )}
+                  {activeTab === 1 && (
+              <FavouriteBillsTab />
+            )}
       
       <BillModal 
         open={modalOpen}

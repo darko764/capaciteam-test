@@ -27,9 +27,9 @@ export interface BillTableProps {
 }
 
 export interface FavouritesContextType {
-  favouritedBills: Set<string>;
+  favouritedBills: Map<string, Bill>;
   isFavourited: (bill: Bill) => boolean;
   toggleFavourite: (bill: Bill) => void;
-  getFavouritedBills: (allBills: Bill[]) => Bill[];
+  getFavouritedBills: () => Bill[];
   getFavouritedCount: () => number;
 }

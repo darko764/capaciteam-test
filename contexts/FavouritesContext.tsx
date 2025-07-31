@@ -10,8 +10,8 @@ interface FavouritesProviderProps {
 }
 
 export const FavouritesProvider: React.FC<FavouritesProviderProps> = ({ children }) => {
-  // Track favourited bills by their unique identifier
-  const [favouritedBills, setFavouritedBills] = useState<Set<string>>(new Set());
+  // Track favourited bills by storing the full bill objects
+  const [favouritedBills, setFavouritedBills] = useState<Map<string, Bill>>(new Map());
 
   // Helper function to generate unique bill ID
   const getBillId = (bill: Bill): string => {
@@ -24,29 +24,29 @@ export const FavouritesProvider: React.FC<FavouritesProviderProps> = ({ children
     return favouritedBills.has(billId);
   };
 
-  // Toggle favourite status
+    // Toggle favourite status
   const toggleFavourite = (bill: Bill): void => {
     const billId = getBillId(bill);
     const isCurrentlyFavourited = favouritedBills.has(billId);
-    
+
     if (isCurrentlyFavourited) {
       // Unfavourite the bill
       setFavouritedBills(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(billId);
-        return newSet;
+        const newMap = new Map(prev);
+        newMap.delete(billId);
+        return newMap;
       });
       console.log(`Request to unfavourite bill ${billId} was dispatched to the server`);
     } else {
       // Favourite the bill
-      setFavouritedBills(prev => new Set(prev).add(billId));
+      setFavouritedBills(prev => new Map(prev).set(billId, bill));
       console.log(`Request to favourite bill ${billId} was dispatched to the server`);
     }
   };
 
-  // Get all favourited bills (if you have the full bill objects)
-  const getFavouritedBills = (allBills: Bill[]): Bill[] => {
-    return allBills.filter(bill => isFavourited(bill));
+  // Get all favourited bills from stored Map
+  const getFavouritedBills = (): Bill[] => {
+    return Array.from(favouritedBills.values());
   };
 
   // Get count of favourited bills

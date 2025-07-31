@@ -11,26 +11,45 @@ import {
   Paper, 
   IconButton,
   Box,
-  Typography
+  Typography,
+  TablePagination
 } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { Bill } from '../types/bill';
 import { useFavourites } from '../contexts/FavouritesContext';
 import BillModal from './BillModal';
+import Filter from './Filter';
 
 interface FavouriteBillsTabProps {
-  allBills: Bill[];
+  // No longer needed - we get bills directly from context
 }
 
-const FavouriteBillsTab: React.FC<FavouriteBillsTabProps> = ({ allBills }) => {
+const FavouriteBillsTab: React.FC<FavouriteBillsTabProps> = () => {
   const { isFavourited, toggleFavourite, getFavouritedBills, getFavouritedCount } = useFavourites();
   
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBill, setSelectedBill] = useState<Bill | null>(null);
+  
+  // Filter state
+  const [billSourceFilter, setBillSourceFilter] = useState('');
+  
+  // Pagination state
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  // Get favourited bills
-  const favouritedBills = getFavouritedBills(allBills);
+  // Get favourited bills and apply filter
+  const allFavouritedBills = getFavouritedBills();
+  const filteredFavouritedBills = billSourceFilter 
+    ? allFavouritedBills.filter(bill => bill.source === billSourceFilter)
+    : allFavouritedBills;
+  
+  // Apply pagination
+  const favouritedBills = filteredFavouritedBills.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+  
   const favouritedCount = getFavouritedCount();
 
   const handleRowClick = (bill: Bill) => {
@@ -48,7 +67,21 @@ const FavouriteBillsTab: React.FC<FavouriteBillsTabProps> = ({ allBills }) => {
     toggleFavourite(bill);
   };
 
-  // Show empty state if no favourited bills
+  const handleBillSourceChange = (billSource: string) => {
+    setBillSourceFilter(billSource);
+    setPage(0); // Reset to first page when filtering
+  };
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to first page when changing rows per page
+  };
+
+  // Show empty state if no favourited bills at all
   if (favouritedCount === 0) {
     return (
       <Box sx={{ 
@@ -72,14 +105,39 @@ const FavouriteBillsTab: React.FC<FavouriteBillsTabProps> = ({ allBills }) => {
 
   return (
     <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
-      <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-        <StarIcon sx={{ color: 'warning.main' }} />
-        <Typography variant="h6" sx={{ fontWeight: 600 }}>
-          Favourited Bills ({favouritedCount})
-        </Typography>
+      <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <StarIcon sx={{ color: 'warning.main' }} />
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            Favourited Bills ({filteredFavouritedBills.length})
+          </Typography>
+        </Box>
+        <Filter
+          billSource={billSourceFilter}
+          onBillSourceChange={handleBillSourceChange}
+        />
       </Box>
       
-      <Paper>
+      {/* Show empty state if no bills match the filter */}
+      {filteredFavouritedBills.length === 0 && favouritedCount > 0 ? (
+        <Box sx={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          py: 8,
+          color: 'text.secondary'
+        }}>
+          <StarIcon sx={{ fontSize: 64, mb: 2, opacity: 0.5 }} />
+          <Typography variant="h6" gutterBottom>
+            No Bills Match Filter
+          </Typography>
+          <Typography variant="body2">
+            Try changing the filter or clear it to see all favourited bills.
+          </Typography>
+        </Box>
+      ) : (
+        <Paper>
         <TableContainer>
           <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
             <TableHead>
@@ -121,7 +179,17 @@ const FavouriteBillsTab: React.FC<FavouriteBillsTabProps> = ({ allBills }) => {
             </TableBody>
           </Table>
         </TableContainer>
-      </Paper>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={filteredFavouritedBills.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+        </Paper>
+      )}
       
       <BillModal 
         open={modalOpen}
