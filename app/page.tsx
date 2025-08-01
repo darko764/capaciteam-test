@@ -1,6 +1,7 @@
 import styles from "./page.module.css";
 import BillTableWithData from "../components/BillTableWithData";
 import { Box } from "@mui/material";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -11,7 +12,9 @@ export default function Home() {
       backgroundColor: 'background.default',
       color: 'text.primary'
     }}>
-      <BillTableWithData />
+      <Suspense fallback={null}>
+        <BillTableWithData />
+      </Suspense>
     </Box>
   );
 }
