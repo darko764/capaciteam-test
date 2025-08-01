@@ -24,6 +24,7 @@ export interface BillTableProps {
   currentLimit: number;
   totalCount: number;
   currentBillSource: string;
+  isLoading?: boolean;
 }
 
 export interface FavouritesContextType {

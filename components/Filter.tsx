@@ -15,13 +15,19 @@ const Filter: React.FC<FilterProps> = ({ billSource, onBillSourceChange }) => {
 
   return (
     <FormControl sx={{ width: 200 }}>
-      <InputLabel id="bill-source-filter-label">Bill Source</InputLabel>
+      <InputLabel id="bill-source-filter-label" shrink>Bill Source</InputLabel>
       <Select
         labelId="bill-source-filter-label"
         id="bill-source-filter"
         value={billSource}
         label="Bill Source"
         onChange={handleChange}
+        displayEmpty
+        sx={{
+          '& .MuiSelect-select': {
+            py: 1.7
+          }
+        }}
       >
         <MenuItem value="">All Bills</MenuItem>
         <MenuItem value="Government">Government Bills</MenuItem>

@@ -1,20 +1,8 @@
 import styles from "./page.module.css";
-import BillTable from "../components/BillTable";
-import { fetchBills } from "../utils/api";
+import BillTableWithData from "../components/BillTableWithData";
 import { Box } from "@mui/material";
 
-interface HomeProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
-
-export default async function Home({ searchParams }: HomeProps) {
-  const params = await searchParams;
-  const page = typeof params.page === 'string' ? parseInt(params.page) : 1;
-  const limit = typeof params.limit === 'string' ? parseInt(params.limit) : 10;
-  const billSource = typeof params.bill_source === 'string' ? params.bill_source : '';
-  
-  const { bills, totalCount } = await fetchBills(page, limit, billSource);
-  
+export default function Home() {
   return (
     <Box sx={{ 
       minHeight: '100vh', 
@@ -23,13 +11,7 @@ export default async function Home({ searchParams }: HomeProps) {
       backgroundColor: 'background.default',
       color: 'text.primary'
     }}>
-      <BillTable 
-        bills={bills} 
-        currentPage={page} 
-        currentLimit={limit} 
-        totalCount={totalCount}
-        currentBillSource={billSource}
-      />
+      <BillTableWithData />
     </Box>
   );
 }
