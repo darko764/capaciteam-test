@@ -1,9 +1,9 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { FavouritesProvider, useFavourites } from '../../contexts/FavouritesContext';
+import { FavouritesProvider } from '../../contexts/FavouritesContext';
 import { Bill } from '../../types/bill';
 import BillTable from '../../components/BillTable';
 
@@ -121,11 +121,11 @@ describe('FavouritesContext', () => {
     await user.click(starButtons[0]);
 
     // Switch to favourites tab
-    const favouritesTab = screen.getByRole('tab', { name: 'Favourites' });
+    const favouritesTab = screen.getByRole('tab', { name: /Favourites/ });
     await user.click(favouritesTab);
 
-    // Should show the favourited bill
-    expect(screen.getByText('Favourited Bills (1)')).toBeInTheDocument();
+    // Should show the favourited bill in the table
     expect(screen.getByText('B1')).toBeInTheDocument();
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
 });

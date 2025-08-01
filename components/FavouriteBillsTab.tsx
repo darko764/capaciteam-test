@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { Bill } from '../types/bill';
-import { useFavourites } from '../contexts/FavouritesContext';
+import { useFavouritesContext } from '../contexts/FavouritesContext';
 import BillModal from './BillModal';
 
 // Skeleton loading component for table rows
@@ -49,7 +49,7 @@ interface FavouriteBillsTabProps {
 }
 
 const FavouriteBillsTab: React.FC<FavouriteBillsTabProps> = ({ billSourceFilter, isLoading = false }) => {
-  const { isFavourited, toggleFavourite, getFavouritedBills, getFavouritedCount } = useFavourites();
+  const { isFavourited, toggleFavourite, getFavouritedBills, getFavouritedCount } = useFavouritesContext();
   
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);

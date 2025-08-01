@@ -24,9 +24,17 @@ import { Bill, BillTableProps } from '../types/bill';
 import Filter from './Filter';
 import BillModal from './BillModal';
 import FavouriteBillsTab from './FavouriteBillsTab';
-import { useFavourites } from '../contexts/FavouritesContext';
+import { useFavouritesContext } from '../contexts/FavouritesContext';
 
-// Skeleton loading component for table rows
+/**
+ * TableSkeleton Component
+ * 
+ * Renders skeleton loading rows that match the exact dimensions and styling
+ * of real table rows. Provides immediate loading feedback to users.
+ * 
+ * @param rowCount - Number of skeleton rows to display (matches pagination size)
+ * @param columnCount - Number of columns (should match table structure)
+ */
 const TableSkeleton: React.FC<{ rowCount: number; columnCount: number }> = ({ rowCount, columnCount }) => (
   <>{[...Array(rowCount)].map((_, index) => (
     <TableRow key={index} sx={{ height: 80 }}>
@@ -49,6 +57,27 @@ const TableSkeleton: React.FC<{ rowCount: number; columnCount: number }> = ({ ro
   ))}</>
 );
 
+/**
+ * BillTable Component
+ * 
+ * Main presentation component for displaying Irish legislation bills.
+ * Handles UI interactions, pagination, filtering, and favourites management.
+ * 
+ * Features:
+ * - Tabbed interface (All Bills vs Favourites)
+ * - Real-time filtering by bill source
+ * - Pagination with customizable page sizes
+ * - Skeleton loading states
+ * - Favourites toggle functionality
+ * - Responsive design with optimized spacing
+ * 
+ * @param bills - Array of bill data to display
+ * @param currentPage - Current page number (1-indexed from API)
+ * @param currentLimit - Number of items per page
+ * @param totalCount - Total number of bills available
+ * @param currentBillSource - Current filter selection
+ * @param isLoading - Loading state for showing skeleton
+ */
 const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit, totalCount, currentBillSource, isLoading = false }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -66,10 +95,10 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
   // Filter state for favourites tab
   const [favouritesBillSource, setFavouritesBillSource] = useState('');
   
-  // Optimistic loading state for immediate feedback
+  // Optimistic loading state for immediate user feedback on interactions
   const [isNavigating, setIsNavigating] = useState(false);
 
-  const { isFavourited, toggleFavourite, getFavouritedCount } = useFavourites();
+  const { isFavourited, toggleFavourite, getFavouritedCount } = useFavouritesContext();
 
   // Reset navigation state when loading completes
   useEffect(() => {
@@ -78,7 +107,7 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
     }
   }, [isLoading]);
 
-  // Combined loading state for immediate feedback
+  // Combined loading state: shows skeleton for both API loading and navigation
   const showLoading = isLoading || isNavigating;
 
   const handleChangePage = (event: unknown, newPage: number) => {

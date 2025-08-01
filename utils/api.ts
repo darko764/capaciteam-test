@@ -1,5 +1,20 @@
+/**
+ * API Utilities
+ * 
+ * Helper functions for interacting with the Oireachtas API.
+ * Handles data fetching, transformation, and error management.
+ */
+
 import { Bill, BillsResponse } from '../types/bill';
 
+/**
+ * Fetch bills from the Oireachtas API
+ * 
+ * @param page - Page number (1-indexed)
+ * @param pageSize - Number of bills per page
+ * @param billSource - Optional filter by bill source (Government, Private, Public)
+ * @returns Promise with bills array and total count
+ */
 export async function fetchBills(page: number = 1, pageSize: number = 10, billSource?: string): Promise<BillsResponse> {
   // Use absolute URL on the server, relative on the client
   const isServer = typeof window === 'undefined';

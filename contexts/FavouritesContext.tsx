@@ -1,7 +1,22 @@
+/**
+ * FavouritesContext
+ * 
+ * React Context that integrates with the useFavourites hook to provide
+ * global favourites state management with full Bill object storage.
+ * 
+ * Features:
+ * - Integrates with useFavourites hook
+ * - Session-based storage (in memory)
+ * - Stores full Bill objects for easy access
+ * - Real-time updates across components
+ * - Optimistic UI updates
+ */
+
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Bill, FavouritesContextType } from '../types/bill';
+import { useFavourites as useBaseFavourites } from '../hooks/useFavourites';
 
 const FavouritesContext = createContext<FavouritesContextType | undefined>(undefined);
 
@@ -10,56 +25,50 @@ interface FavouritesProviderProps {
 }
 
 export const FavouritesProvider: React.FC<FavouritesProviderProps> = ({ children }) => {
-  // Track favourited bills by storing the full bill objects
-  const [favouritedBills, setFavouritedBills] = useState<Map<string, Bill>>(new Map());
+  // Use the base hook for core functionality
+  const baseFavourites = useBaseFavourites();
+  
+  // Store full Bill objects for easy access (Map<billId, Bill>)
+  const [billStorage, setBillStorage] = useState<Map<string, Bill>>(new Map());
 
-  // Helper function to generate unique bill ID
+  // Helper function to generate unique bill ID (same as hook)
   const getBillId = (bill: Bill): string => {
     return `${bill.billNo}/${bill.billYear}`;
   };
 
-  // Check if a bill is favourited
-  const isFavourited = (bill: Bill): boolean => {
-    const billId = getBillId(bill);
-    return favouritedBills.has(billId);
-  };
-
-    // Toggle favourite status
+  // Enhanced toggle that stores full Bill objects
   const toggleFavourite = (bill: Bill): void => {
     const billId = getBillId(bill);
-    const isCurrentlyFavourited = favouritedBills.has(billId);
-
-    if (isCurrentlyFavourited) {
-      // Unfavourite the bill
-      setFavouritedBills(prev => {
+    const wasCurrentlyFavourited = baseFavourites.isFavourited(bill);
+    
+    // Use base hook's toggle logic
+    baseFavourites.toggleFavourite(bill);
+    
+    // Update our Bill storage based on previous state
+    if (wasCurrentlyFavourited) {
+      // Bill was favourited, now being unfavourited
+      setBillStorage(prev => {
         const newMap = new Map(prev);
         newMap.delete(billId);
         return newMap;
       });
-      console.log(`Request to unfavourite bill ${billId} was dispatched to the server`);
     } else {
-      // Favourite the bill
-      setFavouritedBills(prev => new Map(prev).set(billId, bill));
-      console.log(`Request to favourite bill ${billId} was dispatched to the server`);
+      // Bill was not favourited, now being favourited
+      setBillStorage(prev => new Map(prev).set(billId, bill));
     }
   };
 
   // Get all favourited bills from stored Map
   const getFavouritedBills = (): Bill[] => {
-    return Array.from(favouritedBills.values());
-  };
-
-  // Get count of favourited bills
-  const getFavouritedCount = (): number => {
-    return favouritedBills.size;
+    return Array.from(billStorage.values());
   };
 
   const value: FavouritesContextType = {
-    favouritedBills,
-    isFavourited,
+    favouritedBills: billStorage,
+    isFavourited: baseFavourites.isFavourited,
     toggleFavourite,
     getFavouritedBills,
-    getFavouritedCount,
+    getFavouritedCount: baseFavourites.getFavouritedCount,
   };
 
   return (
@@ -69,10 +78,10 @@ export const FavouritesProvider: React.FC<FavouritesProviderProps> = ({ children
   );
 };
 
-export const useFavourites = (): FavouritesContextType => {
+export const useFavouritesContext = (): FavouritesContextType => {
   const context = useContext(FavouritesContext);
   if (context === undefined) {
-    throw new Error('useFavourites must be used within a FavouritesProvider');
+    throw new Error('useFavouritesContext must be used within a FavouritesProvider');
   }
   return context;
 }; 

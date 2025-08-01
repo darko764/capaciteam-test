@@ -1,36 +1,184 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Irish Bills Explorer
 
-## Getting Started
+A modern React application for browsing and managing Irish legislation bills. Built with Next.js, TypeScript, and Material-UI, featuring advanced table functionality, skeleton loading, and favourites management.
 
-First, run the development server:
+## 🌟 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **📊 Interactive Bills Table**: Browse Irish legislation with pagination and filtering
+- **⭐ Favourites System**: Save and manage your favourite bills during your session
+- **🔍 Advanced Filtering**: Filter bills by source (Government, Private, Public)
+- **📱 Responsive Design**: Optimized for desktop and mobile devices
+- **⚡ Skeleton Loading**: Professional loading states with instant feedback
+- **🎨 Material Design**: Clean, modern UI using Material-UI components
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ 
+- npm, yarn, pnpm, or bun
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd capaciteam-test
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
+
+3. **Set up environment variables** (optional)
+   ```bash
+   # Create .env.local file
+   NEXT_PUBLIC_BASE_URL=http://localhost:3000
+   ```
+
+4. **Run the development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+
+5. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 📁 Project Structure
+
+```
+capaciteam-test/
+├── app/                         # Next.js App Router
+│   ├── api/bills/               # API routes for bill data
+│   ├── globals.css              # Global styles
+│   ├── layout.tsx               # Root layout
+│   └── page.tsx                 # Home page
+├── components/                  # React components
+│   ├── BillTable.tsx            # Main table component (presentation)
+│   ├── BillTableWithData.tsx    # Data-fetching wrapper
+│   ├── BillModal.tsx            # Bill details modal
+│   ├── Filter.tsx               # Filtering component
+│   ├── FavouriteBillsTab.tsx    # Favourites tab content
+│   └── ThemeRegistry.tsx        # MUI theme provider
+├── contexts/                    # React Context providers
+│   └── FavouritesContext.tsx    # Favourites state management
+├── hooks/                       # Custom React hooks
+│   ├── useBills.ts              # Data fetching hook
+│   └── useFavourites.ts         # Favourites management hook
+├── types/                       # TypeScript type definitions
+│   └── bill.ts                  # Bill-related types
+├── utils/                       # Utility functions
+│   └── api.ts                   # API helper functions
+├── __tests__/                   # Test files
+├── public/                      # Static assets
+├── jest.config.js               # Jest testing configuration
+├── jest.setup.ts                # Jest setup file
+├── tsconfig.json                # TypeScript configuration
+├── next.config.ts               # Next.js configuration
+├── package.json                 # Dependencies and scripts
+└── eslint.config.mjs            # ESLint configuration
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔧 Key Components
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### BillTable
+Main presentation component for displaying bills data with:
+- Pagination controls
+- Favourites integration
+- Skeleton loading states
+- Responsive column layout
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### FavouritesContext
+Manages global favourites state by integrating with the useFavourites hook:
+- Wraps the useFavourites hook for global state
+- Stores full Bill objects for easy access
+- Session-based storage
+- Real-time updates across components
 
-## Learn More
+### useBills Hook
+Custom hook for data fetching:
+- API integration
+- Loading states
+- Error handling
+- URL parameter synchronization
 
-To learn more about Next.js, take a look at the following resources:
+### useFavourites Hook
+Core favourites logic hook:
+- Lightweight favourites state management
+- ID-based storage for performance
+- Add/remove favourites functionality
+- Used by FavouritesContext for global state
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### useFavouritesContext
+Context accessor for global favourites state:
+- Provides enhanced favourites functionality
+- Must be used within FavouritesProvider
+- Integrates hook logic with full Bill storage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎨 UI Features
 
-## Deploy on Vercel
+### Skeleton Loading
+Professional loading states that:
+- Match exact table dimensions
+- Show during all data fetching
+- Provide instant user feedback
+- Maintain layout stability
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Responsive Design
+- Adaptive column widths
+- Mobile-optimized layout
+- Touch-friendly interactions
+- Consistent spacing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔌 API Integration
+
+The app integrates with the Oireachtas API:
+- **Endpoint**: `https://api.oireachtas.ie/v1/legislation`
+- **Features**: Pagination, filtering, real-time data
+- **Caching**: Client-side request optimization
+
+## 🧪 Testing
+
+Run the test suite:
+```bash
+npm test
+# or
+yarn test
+```
+
+## 🏗️ Build
+
+### Build for production
+```bash
+npm run build
+npm start
+```
+
+## 🛠️ Development
+
+### Adding New Features
+1. Create components in `/components`
+2. Add types in `/types`
+3. Update tests in `/__tests__`
+4. Follow existing patterns for consistency
+
+### Code Style
+- TypeScript for type safety
+- Material-UI for consistent design
+- Functional components with hooks
+- Custom hooks for reusable logic
+
+## 🔗 Learn More
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Material-UI Documentation](https://mui.com/)
+- [Oireachtas API Documentation](https://api.oireachtas.ie/)

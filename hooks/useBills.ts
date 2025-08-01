@@ -1,7 +1,20 @@
+/**
+ * useBills Hook
+ * 
+ * Custom React hook for fetching bills data from the Oireachtas API.
+ * Manages loading states, error handling, and automatic refetching when parameters change.
+ * 
+ * Features:
+ * - Automatic data fetching when dependencies change
+ * - Loading state management with immediate feedback
+ * - Error handling with user-friendly messages
+ * - Optimistic loading states for better UX
+ */
+
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Bill, BillsResponse } from '../types/bill';
+import { Bill } from '../types/bill';
 import { fetchBills } from '../utils/api';
 
 interface UseBillsProps {
@@ -24,7 +37,7 @@ export function useBills({ page, pageSize, billSource }: UseBillsProps): UseBill
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Track previous params to detect changes immediately
+  // Track previous parameters to trigger immediate loading states on changes
   const [prevParams, setPrevParams] = useState({ page, pageSize, billSource });
 
   const fetchData = async () => {
