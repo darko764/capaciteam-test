@@ -3,59 +3,19 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  TablePagination,
   Box,
   Tabs,
   Tab,
-  Badge,
-  Skeleton
+  Badge
 } from '@mui/material';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import StarIcon from '@mui/icons-material/Star';
+
 import { Bill, BillTableProps } from '../types/bill';
 import Filter from './Filter';
-import BillModal from './BillModal';
+import BillTableCore from './BillTableCore';
 import FavouriteBillsTab from './FavouriteBillsTab';
 import { useFavouritesContext } from '../contexts/FavouritesContext';
 
-/**
- * TableSkeleton Component
- * 
- * Renders skeleton loading rows that match the exact dimensions and styling
- * of real table rows. Provides immediate loading feedback to users.
- * 
- * @param rowCount - Number of skeleton rows to display (matches pagination size)
- * @param columnCount - Number of columns (should match table structure)
- */
-const TableSkeleton: React.FC<{ rowCount: number; columnCount: number }> = ({ rowCount, columnCount }) => (
-  <>{[...Array(rowCount)].map((_, index) => (
-    <TableRow key={index} sx={{ height: 80 }}>
-      <TableCell sx={{ minWidth: 100, width: '12%', py: 2.5, pr: 2 }}>
-        <Skeleton variant="text" width="60%" height={20} />
-      </TableCell>
-      <TableCell sx={{ minWidth: 120, width: '15%', py: 2.5, px: 2 }}>
-        <Skeleton variant="text" width="80%" height={20} />
-      </TableCell>
-      <TableCell sx={{ minWidth: 140, width: '18%', py: 2.5, px: 2 }}>
-        <Skeleton variant="text" width="70%" height={20} />
-      </TableCell>
-      <TableCell sx={{ minWidth: 250, width: '45%', py: 2.5, px: 2 }}>
-        <Skeleton variant="text" width="85%" height={20} />
-      </TableCell>
-      <TableCell sx={{ minWidth: 70, width: '10%', py: 2.5, px: 2 }}>
-        <Skeleton variant="circular" width={40} height={40} />
-      </TableCell>
-    </TableRow>
-  ))}</>
-);
+
 
 /**
  * BillTable Component
@@ -86,8 +46,7 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
   const [page, setPage] = useState(currentPage - 1);
   const [rowsPerPage, setRowsPerPage] = useState(currentLimit);
 
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedBill, setSelectedBill] = useState<Bill | null>(null);
+
 
   // Tab state
   const [activeTab, setActiveTab] = useState(0);
@@ -128,7 +87,7 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
     
     const params = new URLSearchParams(searchParams);
     params.set('limit', newLimit.toString());
-    params.set('page', '1'); // Reset to first page when changing limit
+    params.set('page', '1');
     router.push(`?${params.toString()}`);
   };
 
@@ -141,22 +100,12 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
     } else {
       params.delete('bill_source');
     }
-    params.set('page', '1'); // Reset to first page when filtering
+    params.set('page', '1');
     router.push(`?${params.toString()}`);
   };
 
-  const handleRowClick = (bill: Bill) => {
-    setSelectedBill(bill);
-    setModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setModalOpen(false);
-    setSelectedBill(null);
-  };
-
   const handleFavouriteClick = (bill: Bill, e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent row click when clicking star
+    e.stopPropagation();
     toggleFavourite(bill);
   };
 
@@ -206,79 +155,22 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
 
       {/* Tab Content */}
       {activeTab === 0 && (
-        <>
-          <Paper>
-            <TableContainer>
-              <Table sx={{ tableLayout: 'fixed', width: '100%', '& .MuiTableCell-root:first-of-type': { pl: 3 } }}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ minWidth: 100, width: '12%', fontWeight: 600, py: 3, pr: 2, fontSize: '0.875rem' }}>Bill Number</TableCell>
-                    <TableCell sx={{ minWidth: 120, width: '15%', fontWeight: 600, py: 3, px: 2, fontSize: '0.875rem' }}>Bill Type</TableCell>
-                    <TableCell sx={{ minWidth: 140, width: '18%', fontWeight: 600, py: 3, px: 2, fontSize: '0.875rem' }}>Bill Status</TableCell>
-                    <TableCell sx={{ minWidth: 250, width: '45%', fontWeight: 600, py: 3, px: 2, fontSize: '0.875rem' }}>Sponsor</TableCell>
-                    <TableCell sx={{ minWidth: 70, width: '10%', fontWeight: 600, py: 3, px: 2, fontSize: '0.875rem' }}>Favourite</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {showLoading ? (
-                    <TableSkeleton rowCount={rowsPerPage} columnCount={5} />
-                  ) : (
-                    bills.map((bill, idx) => (
-                      <TableRow 
-                        key={idx} 
-                        hover
-                        onClick={() => handleRowClick(bill)}
-                        sx={{ cursor: 'pointer', height: 80 }}
-                      >
-                        <TableCell sx={{ minWidth: 100, width: '12%', py: 2.5, pr: 2 }}>{bill.billNo}</TableCell>
-                        <TableCell sx={{ minWidth: 120, width: '15%', py: 2.5, px: 2 }}>{bill.billType}</TableCell>
-                        <TableCell sx={{ minWidth: 140, width: '18%', py: 2.5, px: 2 }}>{bill.status}</TableCell>
-                        <TableCell sx={{ minWidth: 250, width: '45%', py: 2.5, px: 2 }}>{bill.sponsor}</TableCell>
-                        <TableCell sx={{ minWidth: 70, width: '10%', py: 2.5, px: 2 }}>
-                          <IconButton 
-                            onClick={(e) => handleFavouriteClick(bill, e)}
-                            sx={{ 
-                              color: isFavourited(bill) ? 'warning.main' : 'inherit',
-                              '&:hover': {
-                                color: isFavourited(bill) ? 'warning.dark' : 'warning.main'
-                              }
-                            }}
-                          >
-                            {isFavourited(bill) ? (
-                              <StarIcon color="inherit" />
-                            ) : (
-                              <StarBorderIcon color="inherit" />
-                            )}
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={totalCount}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Paper>
-        </>
+        <BillTableCore
+          bills={bills}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          totalCount={totalCount}
+          isLoading={showLoading}
+          isFavourited={isFavourited}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          onFavouriteClick={handleFavouriteClick}
+        />
       )}
 
-                  {activeTab === 1 && (
-              <FavouriteBillsTab billSourceFilter={favouritesBillSource} isLoading={showLoading} />
-            )}
-      
-      <BillModal 
-        open={modalOpen}
-        onClose={handleModalClose}
-        bill={selectedBill}
-      />
+      {activeTab === 1 && (
+        <FavouriteBillsTab billSourceFilter={favouritesBillSource} isLoading={showLoading} />
+      )}
     </Box>
   );
 };
