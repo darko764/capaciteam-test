@@ -3,6 +3,7 @@ import { TableCell, TableRow, IconButton } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { Bill } from '../types/bill';
+import { ROW_COLUMN_STYLES } from './BillTableCore';
 
 interface BillTableRowProps {
   bill: Bill;
@@ -26,48 +27,19 @@ const BillTableRow: React.FC<BillTableRowProps> = ({
       onClick={() => onRowClick(bill)}
       sx={{ cursor: 'pointer', height: 56 }}
     >
-      <TableCell sx={{ 
-        minWidth: 90, 
-        width: { xs: '15%', md: '12%' }, 
-        py: 1.5, 
-        pr: 1,
-        whiteSpace: 'nowrap'
-      }}>
+      <TableCell sx={ROW_COLUMN_STYLES.billNumber}>
         {bill.billNo}
       </TableCell>
-      <TableCell sx={{ 
-        minWidth: 100, 
-        width: { xs: '18%', md: '15%' }, 
-        py: 1.5, 
-        px: 1,
-        whiteSpace: 'nowrap'
-      }}>
+      <TableCell sx={ROW_COLUMN_STYLES.billType}>
         {bill.billType}
       </TableCell>
-      <TableCell sx={{ 
-        minWidth: 120, 
-        width: { xs: '20%', md: '18%' }, 
-        py: 1.5, 
-        px: 1,
-        whiteSpace: 'nowrap'
-      }}>
+      <TableCell sx={ROW_COLUMN_STYLES.billStatus}>
         {bill.status}
       </TableCell>
-      <TableCell sx={{ 
-        minWidth: 200, 
-        width: { xs: '37%', md: '45%' }, 
-        py: 1.5, 
-        px: 1
-      }}>
+      <TableCell sx={ROW_COLUMN_STYLES.sponsor}>
         {bill.sponsor}
       </TableCell>
-      <TableCell sx={{ 
-        minWidth: 80, 
-        width: '10%', 
-        py: 1.5, 
-        px: 1,
-        textAlign: 'center'
-      }}>
+      <TableCell sx={ROW_COLUMN_STYLES.favourite}>
         <IconButton 
           onClick={(e) => onFavouriteClick(bill, e)}
           sx={{ 

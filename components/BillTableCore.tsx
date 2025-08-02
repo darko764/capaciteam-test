@@ -44,6 +44,58 @@ export interface BillTableCoreProps {
   };
 }
 
+// Centralized column styling - SINGLE SOURCE OF TRUTH
+export const COLUMN_STYLES = {
+  billNumber: {
+    minWidth: 90,
+    width: { xs: '14%', md: '12%' },
+    py: 3,
+    pr: 1,
+    fontSize: '0.875rem',
+    whiteSpace: 'nowrap' as const
+  },
+  billType: {
+    minWidth: 100,
+    width: { xs: '16%', md: '15%' },
+    py: 3,
+    px: 1,
+    fontSize: '0.875rem',
+    whiteSpace: 'nowrap' as const
+  },
+  billStatus: {
+    minWidth: 120,
+    width: { xs: '18%', md: '18%' },
+    py: 3,
+    px: 1,
+    fontSize: '0.875rem',
+    whiteSpace: 'nowrap' as const
+  },
+  sponsor: {
+    minWidth: 200,
+    width: { xs: '32%', md: '45%' },
+    py: 3,
+    px: 1,
+    fontSize: '0.875rem'
+  },
+  favourite: {
+    minWidth: 80,
+    width: { xs: '20%', md: '10%' },
+    py: 3,
+    px: 1,
+    fontSize: '0.875rem',
+    textAlign: 'center' as const
+  }
+};
+
+// Row variants of the same styles
+export const ROW_COLUMN_STYLES = {
+  billNumber: { ...COLUMN_STYLES.billNumber, py: 1.5, fontWeight: 400 },
+  billType: { ...COLUMN_STYLES.billType, py: 1.5, fontWeight: 400 },
+  billStatus: { ...COLUMN_STYLES.billStatus, py: 1.5, fontWeight: 400 },
+  sponsor: { ...COLUMN_STYLES.sponsor, py: 1.5, fontWeight: 400 },
+  favourite: { ...COLUMN_STYLES.favourite, py: 1.5, fontWeight: 400 }
+};
+
 /**
  * BillTableCore Component
  * 
@@ -109,58 +161,19 @@ const BillTableCore: React.FC<BillTableCoreProps> = ({
           }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ 
-                  minWidth: 90, 
-                  width: { xs: '15%', md: '12%' }, 
-                  fontWeight: 600, 
-                  py: 3, 
-                  pr: 1, 
-                  fontSize: '0.875rem',
-                  whiteSpace: 'nowrap'
-                }}>
+                <TableCell sx={{ ...COLUMN_STYLES.billNumber, fontWeight: 600 }}>
                   Bill Number
                 </TableCell>
-                <TableCell sx={{ 
-                  minWidth: 100, 
-                  width: { xs: '18%', md: '15%' }, 
-                  fontWeight: 600, 
-                  py: 3, 
-                  px: 1, 
-                  fontSize: '0.875rem',
-                  whiteSpace: 'nowrap'
-                }}>
+                <TableCell sx={{ ...COLUMN_STYLES.billType, fontWeight: 600 }}>
                   Bill Type
                 </TableCell>
-                <TableCell sx={{ 
-                  minWidth: 120, 
-                  width: { xs: '20%', md: '18%' }, 
-                  fontWeight: 600, 
-                  py: 3, 
-                  px: 1, 
-                  fontSize: '0.875rem',
-                  whiteSpace: 'nowrap'
-                }}>
+                <TableCell sx={{ ...COLUMN_STYLES.billStatus, fontWeight: 600 }}>
                   Bill Status
                 </TableCell>
-                <TableCell sx={{ 
-                  minWidth: 200, 
-                  width: { xs: '37%', md: '45%' }, 
-                  fontWeight: 600, 
-                  py: 3, 
-                  px: 1, 
-                  fontSize: '0.875rem'
-                }}>
+                <TableCell sx={{ ...COLUMN_STYLES.sponsor, fontWeight: 600 }}>
                   Sponsor
                 </TableCell>
-                <TableCell sx={{ 
-                  minWidth: 80, 
-                  width: '10%', 
-                  fontWeight: 600, 
-                  py: 3, 
-                  px: 1, 
-                  fontSize: '0.875rem',
-                  textAlign: 'center'
-                }}>
+                <TableCell sx={{ ...COLUMN_STYLES.favourite, fontWeight: 600 }}>
                   Favourite
                 </TableCell>
               </TableRow>
