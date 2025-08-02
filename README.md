@@ -63,12 +63,15 @@ capaciteam-test/
 │   ├── layout.tsx               # Root layout
 │   └── page.tsx                 # Home page
 ├── components/                  # React components
-│   ├── BillTable.tsx            # Main table component (presentation)
-│   ├── BillTableWithData.tsx    # Data-fetching wrapper
-│   ├── BillModal.tsx            # Bill details modal
-│   ├── Filter.tsx               # Filtering component
-│   ├── FavouriteBillsTab.tsx    # Favourites tab content
-│   └── ThemeRegistry.tsx        # MUI theme provider
+│   ├── BillTable.tsx            # Main tabs & filter layout wrapper
+│   ├── BillTableWithData.tsx    # Data-fetching wrapper for API integration
+│   ├── BillTableCore.tsx        # Unified table component (headers, body, pagination)
+│   ├── BillTableRow.tsx         # Individual table row renderer
+│   ├── BillTableSkeleton.tsx    # Loading skeleton for table rows
+│   ├── BillModal.tsx            # Bill details modal (English/Gaeilge tabs)
+│   ├── Filter.tsx               # Bill source filtering dropdown
+│   ├── FavouriteBillsTab.tsx    # Favourites tab content manager
+│   └── ThemeRegistry.tsx        # MUI theme provider with SSR support
 ├── contexts/                    # React Context providers
 │   └── FavouritesContext.tsx    # Favourites state management
 ├── hooks/                       # Custom React hooks
@@ -89,6 +92,14 @@ capaciteam-test/
 ```
 
 ## 🔧 Key Components
+
+### BillTableCore ⭐ 
+**Unified table component** - the heart of the table system:
+- **Single source of truth** for column styling (`COLUMN_STYLES`, `ROW_COLUMN_STYLES`)
+- Handles table headers, body, pagination, and modal interactions
+- **Centralized responsive design** - mobile/desktop column width management
+- Reusable across different contexts (main bills, favourites)
+- **DRY principle** - eliminates styling duplication
 
 ### BillTable
 Main presentation component for displaying bills data with:
