@@ -104,57 +104,62 @@ const BillTableCore: React.FC<BillTableCoreProps> = ({
           <Table sx={{ 
             tableLayout: 'fixed', 
             width: '100%', 
+            minWidth: 800, // Ensure minimum table width
             '& .MuiTableCell-root:first-of-type': { pl: 3 } 
           }}>
             <TableHead>
               <TableRow>
                 <TableCell sx={{ 
-                  minWidth: 100, 
-                  width: '12%', 
+                  minWidth: 90, 
+                  width: { xs: '15%', md: '12%' }, 
                   fontWeight: 600, 
                   py: 3, 
-                  pr: 2, 
-                  fontSize: '0.875rem' 
+                  pr: 1, 
+                  fontSize: '0.875rem',
+                  whiteSpace: 'nowrap'
                 }}>
                   Bill Number
                 </TableCell>
                 <TableCell sx={{ 
-                  minWidth: 120, 
-                  width: '15%', 
+                  minWidth: 100, 
+                  width: { xs: '18%', md: '15%' }, 
                   fontWeight: 600, 
                   py: 3, 
-                  px: 2, 
-                  fontSize: '0.875rem' 
+                  px: 1, 
+                  fontSize: '0.875rem',
+                  whiteSpace: 'nowrap'
                 }}>
                   Bill Type
                 </TableCell>
                 <TableCell sx={{ 
-                  minWidth: 140, 
-                  width: '18%', 
+                  minWidth: 120, 
+                  width: { xs: '20%', md: '18%' }, 
                   fontWeight: 600, 
                   py: 3, 
-                  px: 2, 
-                  fontSize: '0.875rem' 
+                  px: 1, 
+                  fontSize: '0.875rem',
+                  whiteSpace: 'nowrap'
                 }}>
                   Bill Status
                 </TableCell>
                 <TableCell sx={{ 
-                  minWidth: 250, 
-                  width: '45%', 
+                  minWidth: 200, 
+                  width: { xs: '37%', md: '45%' }, 
                   fontWeight: 600, 
                   py: 3, 
-                  px: 2, 
-                  fontSize: '0.875rem' 
+                  px: 1, 
+                  fontSize: '0.875rem'
                 }}>
                   Sponsor
                 </TableCell>
                 <TableCell sx={{ 
-                  minWidth: 70, 
+                  minWidth: 80, 
                   width: '10%', 
                   fontWeight: 600, 
                   py: 3, 
-                  px: 2, 
-                  fontSize: '0.875rem' 
+                  px: 1, 
+                  fontSize: '0.875rem',
+                  textAlign: 'center'
                 }}>
                   Favourite
                 </TableCell>

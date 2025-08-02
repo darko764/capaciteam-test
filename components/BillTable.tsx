@@ -115,42 +115,93 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
 
   return (
     <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
-      {/* Tabs with Filter */}
-      <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        {/* Tabs section with border that stops before filter */}
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', flex: 1, mr: 2 }}>
-          <Tabs value={activeTab} onChange={handleTabChange} aria-label="bill table tabs">
-            <Tab label="All Bills" />
-            <Tab 
-              label={
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <span>Favourites</span>
-                  {getFavouritedCount() > 0 && (
-                    <Badge 
-                      badgeContent={getFavouritedCount()} 
-                      color="warning"
-                      sx={{
-                        '& .MuiBadge-badge': {
-                          position: 'static',
-                          transform: 'none',
-                          fontSize: '0.75rem',
-                          minWidth: '18px',
-                          height: '18px'
-                        }
-                      }}
-                    />
-                  )}
-                </Box>
-              } 
-            />
-          </Tabs>
+      {/* Tabs and Filter - responsive layout */}
+      <Box sx={{ mb: 3 }}>
+        {/* Desktop: Side-by-side layout */}
+        <Box sx={{ 
+          display: { xs: 'none', md: 'flex' }, 
+          justifyContent: 'space-between', 
+          alignItems: 'center' 
+        }}>
+          {/* Tabs section with border that stops before filter */}
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', flex: 1, mr: 2 }}>
+            <Tabs value={activeTab} onChange={handleTabChange} aria-label="bill table tabs">
+              <Tab label="All Bills" />
+              <Tab 
+                label={
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <span>Favourites</span>
+                    {getFavouritedCount() > 0 && (
+                      <Badge 
+                        badgeContent={getFavouritedCount()} 
+                        color="warning"
+                        sx={{
+                          '& .MuiBadge-badge': {
+                            position: 'static',
+                            transform: 'none',
+                            fontSize: '0.75rem',
+                            minWidth: '18px',
+                            height: '18px'
+                          }
+                        }}
+                      />
+                    )}
+                  </Box>
+                } 
+              />
+            </Tabs>
+          </Box>
+          
+          {/* Filter on the right */}
+          <Filter 
+            billSource={activeTab === 0 ? currentBillSource : favouritesBillSource} 
+            onBillSourceChange={activeTab === 0 ? handleBillSourceChange : setFavouritesBillSource} 
+          />
         </Box>
-        
-        {/* Show appropriate filter for each tab */}
-        <Filter 
-          billSource={activeTab === 0 ? currentBillSource : favouritesBillSource} 
-          onBillSourceChange={activeTab === 0 ? handleBillSourceChange : setFavouritesBillSource} 
-        />
+
+        {/* Mobile: Stacked layout */}
+        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+          {/* Tabs Row */}
+          <Box sx={{ 
+            borderBottom: 1, 
+            borderColor: 'divider',
+            mb: 2
+          }}>
+            <Tabs value={activeTab} onChange={handleTabChange} aria-label="bill table tabs">
+              <Tab label="All Bills" />
+              <Tab 
+                label={
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <span>Favourites</span>
+                    {getFavouritedCount() > 0 && (
+                      <Badge 
+                        badgeContent={getFavouritedCount()} 
+                        color="warning"
+                        sx={{
+                          '& .MuiBadge-badge': {
+                            position: 'static',
+                            transform: 'none',
+                            fontSize: '0.75rem',
+                            minWidth: '18px',
+                            height: '18px'
+                          }
+                        }}
+                      />
+                    )}
+                  </Box>
+                } 
+              />
+            </Tabs>
+          </Box>
+          
+          {/* Filter Row */}
+          <Box>
+            <Filter 
+              billSource={activeTab === 0 ? currentBillSource : favouritesBillSource} 
+              onBillSourceChange={activeTab === 0 ? handleBillSourceChange : setFavouritesBillSource} 
+            />
+          </Box>
+        </Box>
       </Box>
 
       {/* Tab Content */}

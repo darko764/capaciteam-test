@@ -26,19 +26,48 @@ const BillTableRow: React.FC<BillTableRowProps> = ({
       onClick={() => onRowClick(bill)}
       sx={{ cursor: 'pointer', height: 56 }}
     >
-      <TableCell sx={{ minWidth: 100, width: '12%', py: 1.5, pr: 2 }}>
+      <TableCell sx={{ 
+        minWidth: 90, 
+        width: { xs: '15%', md: '12%' }, 
+        py: 1.5, 
+        pr: 1,
+        whiteSpace: 'nowrap'
+      }}>
         {bill.billNo}
       </TableCell>
-      <TableCell sx={{ minWidth: 120, width: '15%', py: 1.5, px: 2 }}>
+      <TableCell sx={{ 
+        minWidth: 100, 
+        width: { xs: '18%', md: '15%' }, 
+        py: 1.5, 
+        px: 1,
+        whiteSpace: 'nowrap'
+      }}>
         {bill.billType}
       </TableCell>
-      <TableCell sx={{ minWidth: 140, width: '18%', py: 1.5, px: 2 }}>
+      <TableCell sx={{ 
+        minWidth: 120, 
+        width: { xs: '20%', md: '18%' }, 
+        py: 1.5, 
+        px: 1,
+        whiteSpace: 'nowrap'
+      }}>
         {bill.status}
       </TableCell>
-      <TableCell sx={{ minWidth: 250, width: '45%', py: 1.5, px: 2 }}>
+      <TableCell sx={{ 
+        minWidth: 200, 
+        width: { xs: '37%', md: '45%' }, 
+        py: 1.5, 
+        px: 1
+      }}>
         {bill.sponsor}
       </TableCell>
-      <TableCell sx={{ minWidth: 70, width: '10%', py: 1.5, px: 2 }}>
+      <TableCell sx={{ 
+        minWidth: 80, 
+        width: '10%', 
+        py: 1.5, 
+        px: 1,
+        textAlign: 'center'
+      }}>
         <IconButton 
           onClick={(e) => onFavouriteClick(bill, e)}
           sx={{ 
