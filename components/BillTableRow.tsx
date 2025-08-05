@@ -1,9 +1,10 @@
 import React from 'react';
-import { TableCell, TableRow, IconButton } from '@mui/material';
+import { TableCell, TableRow, IconButton, Chip } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { Bill } from '../types/bill';
 import { ROW_COLUMN_STYLES } from './BillTableCore';
+import { getStatusColor } from '../utils/statusColors';
 
 interface BillTableRowProps {
   bill: Bill;
@@ -20,6 +21,8 @@ const BillTableRow: React.FC<BillTableRowProps> = ({
   onRowClick,
   onFavouriteClick
 }) => {
+  const statusConfig = getStatusColor(bill.status);
+
   return (
     <TableRow 
       key={index} 
@@ -34,7 +37,19 @@ const BillTableRow: React.FC<BillTableRowProps> = ({
         {bill.billType}
       </TableCell>
       <TableCell sx={ROW_COLUMN_STYLES.billStatus}>
-        {bill.status}
+        <Chip
+          label={bill.status}
+          color={statusConfig.color}
+          variant={statusConfig.variant}
+          size="small"
+          sx={{ 
+            fontSize: '0.75rem',
+            height: 24,
+            '& .MuiChip-label': {
+              px: 1
+            }
+          }}
+        />
       </TableCell>
       <TableCell sx={ROW_COLUMN_STYLES.sponsor}>
         {bill.sponsor}
