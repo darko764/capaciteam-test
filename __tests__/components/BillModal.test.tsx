@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import BillModal from '../../components/BillModal';
+import { BillModal } from '../../components/bills';
 import { Bill } from '../../types/bill';
 
 // Helper to wrap components with MUI theme

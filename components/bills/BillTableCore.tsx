@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import {
   Table,
@@ -12,7 +14,7 @@ import {
   Typography
 } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
-import { Bill } from '../types/bill';
+import { Bill } from '../../types/bill';
 import BillTableRow from './BillTableRow';
 import BillTableSkeleton from './BillTableSkeleton';
 import BillModal from './BillModal';

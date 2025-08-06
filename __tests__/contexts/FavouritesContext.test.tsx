@@ -5,7 +5,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FavouritesProvider } from '../../contexts/FavouritesContext';
 import { Bill } from '../../types/bill';
-import BillTable from '../../components/BillTable';
+import { BillTable } from '../../components/bills';
 
 // Mock bill data
 const mockBill1: Bill = {

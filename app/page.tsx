@@ -1,5 +1,5 @@
 import styles from "./page.module.css";
-import BillTableWithData from "../components/BillTableWithData";
+import { BillTableWithData } from "../components/bills";
 import { Box } from "@mui/material";
 import { Suspense } from "react";
 

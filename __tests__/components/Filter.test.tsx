@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Filter from '../../components/Filter';
+import { Filter } from '../../components/ui';
 
 // Helper to wrap components with MUI theme
 const renderWithTheme = (component: React.ReactElement) => {

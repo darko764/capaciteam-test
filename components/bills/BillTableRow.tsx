@@ -2,9 +2,9 @@ import React from 'react';
 import { TableCell, TableRow, IconButton, Chip } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import { Bill } from '../types/bill';
+import { Bill } from '../../types/bill';
 import { ROW_COLUMN_STYLES } from './BillTableCore';
-import { getStatusColor } from '../utils/statusColors';
+import { getStatusColor } from '../../utils/statusColors';
 
 interface BillTableRowProps {
   bill: Bill;

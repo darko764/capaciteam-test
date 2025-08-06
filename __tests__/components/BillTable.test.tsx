@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useRouter, useSearchParams } from 'next/navigation';
-import BillTable from '../../components/BillTable';
+import { BillTable } from '../../components/bills';
 import { FavouritesProvider } from '../../contexts/FavouritesContext';
 import { Bill } from '../../types/bill';
 

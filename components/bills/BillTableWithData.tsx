@@ -4,15 +4,15 @@ import React from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Box, Alert } from '@mui/material';
 import BillTable from './BillTable';
-import { useBills } from '../hooks/useBills';
+import { useBills } from '../../hooks/useBills';
 
 const BillTableWithData: React.FC = () => {
   const searchParams = useSearchParams();
   
   // Extract URL parameters
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '10');
-  const billSource = searchParams.get('bill_source') || '';
+  const page = parseInt(searchParams?.get('page') || '1');
+  const limit = parseInt(searchParams?.get('limit') || '10');
+  const billSource = searchParams?.get('bill_source') || '';
 
   // Fetch bills data with loading state
   const { bills, totalCount, isLoading, error } = useBills({

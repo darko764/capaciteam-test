@@ -14,7 +14,7 @@ import {
   IconButton
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { Bill } from '../types/bill';
+import { Bill } from '../../types/bill';
 
 interface BillModalProps {
   open: boolean;

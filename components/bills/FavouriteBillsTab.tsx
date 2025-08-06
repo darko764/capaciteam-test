@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import StarIcon from '@mui/icons-material/Star';
-import { Bill } from '../types/bill';
-import { useFavouritesContext } from '../contexts/FavouritesContext';
+import { Bill } from '../../types/bill';
+import { useFavouritesContext } from '../../contexts/FavouritesContext';
 import BillTableCore from './BillTableCore';
 
 

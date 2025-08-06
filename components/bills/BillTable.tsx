@@ -9,11 +9,11 @@ import {
   Badge
 } from '@mui/material';
 
-import { Bill, BillTableProps } from '../types/bill';
-import Filter from './Filter';
+import { Bill, BillTableProps } from '../../types/bill';
+import { Filter } from '../ui';
 import BillTableCore from './BillTableCore';
 import FavouriteBillsTab from './FavouriteBillsTab';
-import { useFavouritesContext } from '../contexts/FavouritesContext';
+import { useFavouritesContext } from '../../contexts/FavouritesContext';
 
 
 
@@ -74,7 +74,7 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
     setPage(newPage);
     setIsNavigating(true);
     
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams || '');
     params.set('page', newPageOneIndexed.toString());
     router.push(`?${params.toString()}`);
   };
@@ -85,7 +85,7 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
     setPage(0);
     setIsNavigating(true);
     
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams || '');
     params.set('limit', newLimit.toString());
     params.set('page', '1');
     router.push(`?${params.toString()}`);
@@ -94,7 +94,7 @@ const BillTable: React.FC<BillTableProps> = ({ bills, currentPage, currentLimit,
   const handleBillSourceChange = (billSource: string) => {
     setIsNavigating(true);
     
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams || '');
     if (billSource) {
       params.set('bill_source', billSource);
     } else {
