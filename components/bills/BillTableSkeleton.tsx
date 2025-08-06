@@ -1,5 +1,5 @@
 import React from 'react';
-import { TableCell, TableRow, Skeleton } from '@mui/material';
+import { TableCell, TableRow, Skeleton, Box } from '@mui/material';
 import { ROW_COLUMN_STYLES } from './BillTableCore';
 
 interface BillTableSkeletonProps {
@@ -30,7 +30,9 @@ const BillTableSkeleton: React.FC<BillTableSkeletonProps> = ({ rowCount }) => (
         <Skeleton variant="text" width="85%" height={20} />
       </TableCell>
       <TableCell sx={ROW_COLUMN_STYLES.favourite}>
-        <Skeleton variant="circular" width={40} height={40} />
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Skeleton variant="circular" width={40} height={40} />
+        </Box>
       </TableCell>
     </TableRow>
   ))}</>
